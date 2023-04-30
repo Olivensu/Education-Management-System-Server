@@ -16,6 +16,7 @@ async function run(){
         await client.connect();
         const postCollection = client.db('Education_Management_System').collection('posts');
         const jobPostCollection = client.db('Education_Management_System').collection('jobs');
+        const courseCollection = client.db('Education_Management_System').collection('courses');
 
         app.get('/posts', async(req, res)=>{
             // const query = {};
@@ -41,6 +42,20 @@ async function run(){
         app.post('/jobs', async(req, res)=>{
             const jobs = req.body;
             const result = await jobPostCollection.insertOne(jobs);
+            return res.send(result);
+        })
+
+        
+        app.get('/courses', async(req, res)=>{
+            // const query = {};
+            const cursor =  courseCollection.find({});
+            const course = await cursor.toArray();
+            res.send(course);
+        })
+        
+        app.post('/courses', async(req, res)=>{
+            const course = req.body;
+            const result = await courseCollection.insertOne(course);
             return res.send(result);
         })
     } 
