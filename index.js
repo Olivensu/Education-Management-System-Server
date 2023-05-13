@@ -14,9 +14,23 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run(){
     try {
         await client.connect();
+        const registerCollection = client.db('Education_Management_System').collection('register');
         const postCollection = client.db('Education_Management_System').collection('posts');
         const jobPostCollection = client.db('Education_Management_System').collection('jobs');
         const courseCollection = client.db('Education_Management_System').collection('courses');
+
+        app.get('/register', async(req, res)=>{
+            // const query = {};
+            const cursor =  registerCollection.find({});
+             const register = await cursor.toArray();
+            res.send(register);
+        })
+        
+        app.post('/register', async(req, res)=>{
+            const register = req.body;
+            const result = await registerCollection.insertOne(register);
+            return res.send(result);
+        })
 
         app.get('/posts', async(req, res)=>{
             // const query = {};
